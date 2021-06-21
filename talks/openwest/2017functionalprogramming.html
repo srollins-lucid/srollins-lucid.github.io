@@ -1,0 +1,621 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <title>A Crash Course in Functional Programming - OpenWest 2017</title>
+
+        <link rel="stylesheet" href="../reveal/css/reveal.css">
+
+        <!-- Primary presenation theme -->
+        <!-- <link rel="stylesheet" href="../reveal/css/theme/league.css"> --> <!-- dark -->
+        <link rel="stylesheet" href="../reveal/css/theme/serif.css"> <!-- light -->
+
+        <!-- Syntax highlighting theme -->
+        <!-- <link rel="stylesheet" href="../reveal/lib/css/zenburn.css"> --> <!-- dark -->
+        <link rel="stylesheet" href="../reveal/lib/css/tomorrow.min.css"> <!-- light -->
+
+        <style>
+            .reveal pre code {
+                max-height: 500px;
+            }
+
+            .code-highlight {
+                color: #77e;
+            }
+
+            code.code-small {
+                font-size: 12pt;
+                line-height: 14pt;
+            }
+
+            p.text-small {
+                font-size: 16pt;
+                line-height: 18pt;
+            }
+
+            .word-highlight {
+                /*color: lemonchiffon;*/ /* dark */
+                color: crimson; /*light*/
+            }
+
+            .sub-title .author {
+              font-size: 150%;
+            }
+
+            .sub-title a {
+              font-size: 50%;
+            }
+
+            .sub-title p:not(.author) {
+              font-size: 75%;
+              margin: 0;
+            }
+
+            .sub-title .job-title {
+              margin-bottom: 30px;
+            }
+
+            .image p {
+              font-size: 75%;
+              margin: 0;
+            }
+
+            .reveal ul ul li {
+              font-size: 75%;
+            }
+        </style>
+
+        <!-- Printing and PDF exports -->
+        <script>
+            var link = document.createElement( 'link' );
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = window.location.search.match( /print-pdf/gi ) ? '../reveal/css/print/pdf.css' : '../reveal/css/print/paper.css';
+            document.getElementsByTagName( 'head' )[0].appendChild( link );
+        </script>
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section>
+                  <h3>A Crash Course in Functional Programming</h3>
+                  <div class="sub-title">
+                    <p class="author">Stephen Rollins</p>
+                    <div class="job-title">
+                      <p>Software Engineer</p>
+                      <p>Lucid Software Inc</p>
+                    </div>
+                    <p>OpenWest 2017</p>
+                    <p>07-13-17</p>
+                    <a href="http://srollins-lucid.github.io/talks/openwest/2017functionalprogramming.html">http://srollins-lucid.github.io/talks/openwest/2017functionalprogramming.html</a>
+                  </div>
+                  <aside class="notes">
+                    <p>Please feel free to ask questions or make comments throughout the presentation</p>
+                    <p>Makes for a more effective learning experience for all</p>
+                  </aside>
+                </section>
+                <section>
+                  <div class="image">
+                    <img
+                      src="functionalprogramming/functional_xkcd_2x.png"
+                      title="Functional programming combines the flexibility and power of abstract mathematics with the intuitive clarity of abstract mathematics."
+                      alt="https://xkcd.com/1270/"
+                      srcset="functionalprogramming/functional_xkcd_2x.png 2x"
+                    />
+                    <p>Functional programming combines the flexibility and power of abstract mathematics with the intuitive clarity of abstract mathematics.</p>
+                    <p>Source: xkcd.com</p>
+                  </div>
+                  <aside class="notes">
+                    <ul>
+                        <li>Every good presentation begins with an XKCD!</li>
+                        <li>
+                            FP can seem daunting
+                            <ul>
+                                <li>have to be smart to understand?</li>
+                                <li>symbols and algebras; seems so abstract</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </aside>
+                </section>
+                <section>
+                    <section>
+                        <h3>What is Functional Programming?</h3>
+                        <ul><li>Programming without side effects</li></ul>
+                        <aside class="notes">What are side effects? Well, let's look at an example...</aside>
+                    </section>
+                    <section>
+                        With Side Effects (JavaScript):
+                        <pre><code class="javascript code-small">var count = 1
+
+var addOne = function() {
+    return ++count;
+}
+
+console.log(addOne()); // 2
+console.log(addOne()); // 3</code></pre>
+                        <div class="fragment fade-up">
+                            Without Side Effects (JavaScript):
+                            <pre><code class="javascript code-small">var count = 1
+
+var addOne = function() {
+    return count + 1;
+}
+
+console.log(addOne()); // 2
+console.log(addOne()); // 2</code></pre>
+                        </div>
+                        <span class="fragment">This is called a <strong class="code-highlight">pure function</strong>.</span>
+                        <aside class="notes">
+                            <ul>
+                                <li>In the first example, incrementing <strong>count</strong> is a side effect of calling <strong>addOne</strong>.</li>
+                                <li>More details on Pure Functions coming up</li>
+                            </ul></aside>
+                    </section>
+                </section>
+                <section>
+                    <h3>Guiding Principles of Functional Programming</h3>
+                    <ul>
+                        <li>Pure functions</li> <!-- Referential transparency, understandable/predictable, mnemonizable, dead code removal, concurrency -->
+                        <li>No mutation</li> <!-- Copy instead of mutate -->
+                        <li>Expression-based programming</li>
+                    </ul>
+                    <aside class="notes">These principles will lay a foundation for us to better understand the "whys" of functional programming</aside>
+                </section>
+                <section>
+                    <section>
+                        <h3>Pure Functions</h3>
+                        <div>A function that:</div>
+                        <ul>
+                            <li>has no side effects</li>
+                            <li>
+                                returns the same result for the same inputs
+                                <ul><li>referential transparency</li></ul>
+                            </li>
+                        </ul>
+                        <pre class="fragment"><code class="hljs code-small">f(x) = x + 1</code></pre>
+                        <pre class="fragment"><code class="javascript code-small">var addOne = function(x) {
+    return x + 1;
+}</code></pre>
+                        <aside class="notes">"Function" in the mathematical sense (fragment)</aside>
+                    </section>
+                    <section>
+                        <h3>Referential transparency</h3>
+                        <ul>
+                            <li>Calling a function multiple times with the same inputs results in the same outputs</li>
+                            <li>
+                                Makes code easier to reason about
+                                <ul>
+                                    <li>Easier to prove correctness</li>
+                                    <li>Safer refactoring</li>
+                                    <li>Safer concurrency</li>
+                                </ul>
+                            </li>
+                            <li>
+                                Makes code memoizable
+                                <ul><li>Cache the result of an expensive calculation for given inputs</li></ul>
+                            </li>
+                        </ul>
+                        <aside class="notes">Why do we want referential transparency?</aside>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h3>Immutability</h3>
+                        <ul>
+                            <li>
+                                A new copy of an object must be created to change its state
+                                <ul><li>Conversely, objects do not need to be copied to guarantee functions won't modify them (pass-by-reference)</li></ul>
+                            </li>
+                            <li>
+                                Makes code easier to reason about
+                                <ul><li>Guarantees thread safety</li></ul>
+                            </li>
+                            <li>Generally only enforceable at compile time</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <p>Immutability and pure functions go hand-in-hand</p>
+                        Mutable and impure (JavaScript):
+                        <pre><code class="javascript code-small">var a = [1, 2, 3];
+var b = a.push(4);
+
+console.log(a); // [1, 2, 3, 4]
+console.log(b); // 4 (length of the new array)</code></pre>
+                        Immutable and pure (JavaScript):
+                        <pre><code class="javascript code-small">var a = [1, 2, 3];
+var b = a.concat(4);
+
+console.log(a); // [1, 2, 3]
+console.log(b); // [1, 2, 3, 4]</code></pre>
+                        <aside class="notes">Pure functions aren't directly related to immutability (although they don't modify state), but an API providing pure functions will naturally encourage immutability.</aside>
+                    </section>
+                </section>
+                <section>
+                    <h3>Expressions vs Statements</h3>
+                    <p>What are the results of these two lines?</p>
+                    <p>Java:</p>
+                    <pre><code class="java code-small">// 1
+if (favoriteColor != null) favoriteColor else defaultFavoriteColor; // Statement
+
+// 2
+favoriteColor != null ? favoriteColor : defaultFavoriteColor; // Expression</code></pre>
+                    <ul class="fragment">
+                        <li>Expressions are a natural side-effect and useful construct when all functions are pure and return a value</li>
+                        <li>Statements are more common when only the side effect of the code is desired</li>
+                    </ul>
+                    <aside class="notes">First example is effectively dead code, because it is a statement that has no side effects</aside>
+                </section>
+                <section>
+                    <h3>Key Tools and Common Patterns</h3>
+                    <ul>
+                        <li>
+                            Recursion
+                            <ul><li>Tail Recursion</li></ul>
+                        </li>
+                        <li>
+                            First-class functions
+                            <ul>
+                                <li>Higher-order functions</li>
+                                <li>Partial application (Currying)</li>
+                            </ul>
+                        </li>
+                        <li>Strict vs lazy evaluation</li>
+                        <!-- <li>Type systems</li> -->
+                        <li>Data structures</li>
+                    </ul>
+                    <aside class="notes">People will often think that this is what FP is</aside>
+                </section>
+                <section>
+                    <section>
+                        <h3>Recursion</h3>
+                        <ul>
+                            <li>A looping construct where a function calls itself</li>
+                            <li>Used to break down larger problems into small, incremental problems</li>
+                            <li>Doesn't require mutable state like a conventional <strong class="code-highlight">for</strong> loop</li>
+                        </ul>
+                        <p>Example (JavaScript):</p>
+                        <pre><code class="javascript code-small">// Calculate x!
+function factorial(x) {
+    if (x <= 1) {
+        return 1;
+    } else {
+        return x * factorial(x - 1);
+    }
+}</code></pre>
+                    </section>
+                    <section>
+                        <h3>Pitfalls of Recursion</h3>
+                        <ul>
+                            <li>
+                                Infinite loops
+                                <ul>
+                                    <li>Requires a base case</li>
+                                    <li>"Pete and Repeat were walking up a wall. Pete fell down; who was left?" "Repeat." "Pete and Repeat were walking up a wall..."</li>
+                                </ul>
+                            </li>
+                            <li>Stack overflows</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>Tail Recursion</h3>
+                        <ul>
+                            <li>When the recursive call is the very last line of the function</li>
+                            <li>Does not add new stack frames; no stack overflow</li>
+                            <li>
+                                Compiler optimization
+                                <ul><li>Resulting machine code implemented very similar to a <strong class="code-highlight">while</strong> loop</li></ul>
+                            </li>
+                        </ul>
+                        <p>Example (Scala):</p>
+                        <pre><code class="scala code-small">// Calculate x!
+@tailrec
+def factorial(x: Int, accumulator: Int = 1): Int = {
+    if (x <= 1) {
+        accumulator
+    } else {
+        // Multiplication happens before function call; function call is in tail position
+        factorial(x - 1, accumulator * x)
+    }
+}</code></pre>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h3>First-Class Functions</h3>
+                        <ul>
+                            <li>Functions as a data type like <strong class="code-highlight">int</strong> or <strong class="code-highlight">string</strong></li>
+                            <li>Can be passed as parameters or returned from a computation</li>
+                        </ul>
+                        Example (JavaScript):
+                        <pre><code class="javascript code-small">var myFunction = function(x) { /* something awesome */ };</code></pre>
+                    </section>
+                    <section>
+                        <h3>Higher-Order Functions</h3>
+                        <p>Functions that take a function as a parameter</p>
+                        <p>Example (JavaScript):</p>
+                        <pre><code class="javascript code-small">var isEven = function(x) { return x % 2 == 0; };
+
+var evens = [1, 2, 3, 4, 5].filter(isEven);
+console.log(evens); // [2, 4]</code></pre>
+                        <p class="fragment"><strong class="code-highlight">Array.filter()</strong> is a higher-order function</p>
+                    </section>
+                    <section>
+                        <h3>Partial Application (Currying)</h3>
+                        <p>A function that takes part of its parameters and returns another function that takes the rest of the parameters and performs the computation</p>
+                        <p>Example (JavaScript):</p>
+                        <pre><code class="javascript code-small">// Normal function
+function add(x, y) { return x + y; }
+
+// Curried function
+function partialAdd(x) { return function(y) { return x + y; }; }
+
+var plusTwo = partialAdd(2);
+plusTwo(2); // 4
+plusTwo(5); // 7
+
+partialAdd(5)(11); // 16</code></pre>
+                    <aside class="notes">Partially-applied functions keep a reference to the variables in the outer scope (closure)</aside>
+                    </section>
+                </section>
+                <section>
+                    <h4>Strict vs Lazy Evaluation</h4>
+                    <ul>
+                        <li>Lazy: wait as long as possible to calculate a result</li>
+                        <li>
+                            Results can be cached to avoid needless re-calculating
+                            <ul><li>Assumes pure functions</li></ul>
+                        </li>
+                        <li>Runtime performance in exchange for difficulty in reasoning about order of computation</li>
+                        <li>Allows for data structures of potentially infinite size</li>
+                    </ul>
+                    <p>Strict evaluation (Scala):</p>
+                    <pre><code class="scala code-small">println(List(1, 2, 3 / 0, 4, 5).length) // java.lang.ArithmeticException: / by zero</code></pre>
+                    Lazy evaulation (Haskell):
+                    <pre><code class="haskell code-small">print (length [1, 2, 3 / 0, 4, 5]) -- 5</code></pre>
+                </section>
+                <!-- <section>
+                    <h3>Type Systems</h3>
+                    <ul>
+                        <li>
+                            Types: Compile-time verification of some of the code's behavior
+                            <ul>Example: <strong class="code-highlight">.length()</strong> makes sense for a <strong class="code-highlight">string</strong> or <strong class="code-highlight">array</strong> but would fail at runtime for an <strong class="code-highlight">int</strong></ul>
+                        </li>
+                        
+                    </ul>
+                </section> -->
+                <section>
+                    <section>
+                        <h3>Functional Data Structures</h3>
+                        <ul>
+                            <li>Conceptually similar to imperative data structures in other languages</li>
+                            <li>
+                                Offer a different API to take advantage of functional programming practices
+                                <ul>
+                                    <li>Immutability</li>
+                                    <li>Higher-order functions</li>
+                                    <li>Recursion</li>
+                                </ul>
+                            </li>
+                            <li>
+                                Common functional data structures
+                                <ul>
+                                    <li>List</li>
+                                    <li>Set</li>
+                                    <li>Map</li>
+                                    <li>Option</li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <aside class="notes">Array is noticably absent from the list. While you can make arrays with functional APIs, it is a little strange since arrays are fundamentally mutable.</aside>
+                    </section>
+                    <section>
+                        <h3>Common Operations on Functional Data Structures</h3>
+                        <ul>
+                            <li>.foreach()</li>
+                            <li>.map()</li>
+                            <li>.flatten</li>
+                            <li>.flatMap()</li>
+                            <li>.filter()</li>
+                            <li>.find()</li>
+                            <li>.some()/.exists()</li>
+                            <li>.each()/.forall()</li>
+                            <li>.reduce()/.fold()</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>.foreach()</h3>
+                        <ul>
+                            <li>Very common, even in imperative languages</li>
+                            <li>
+                                Calls a function on every element in the data structure
+                                <ul>
+                                    <li>Returns nothing; function should
+                                    have side effects</li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <p>Example (Java):</p>
+                        <pre><code class="java code-small">for (Student student : students) {
+    System.out.println("Processing student " + student.name);
+    // Do stuff with student
+}</code></pre>
+                    </section>
+                    <section>
+                        <h3>.map()</h3>
+                        <ul>
+                            <li>Conceptually similar to <strong class="code-highlight">.foreach()</strong></li>
+                            <li>Calls a function on every element</li>
+                            <li>Creates a new data structure with results</li>
+                        </ul>
+                        <p>Example (JavaScript):</p>
+                        <pre><code class="javascript code-small">[1, 2, 3, 4, 5].map((x) => x + 3); // [4, 5, 6, 7, 8]
+
+
+var names = students.map((student) => student.name);</code></pre>
+                    <aside class="notes">Second example shows transforming the type</aside>
+                    </section>
+                    <section>
+                        <h3>.flatten</h3>
+                        <ul>
+                            <li>Sometimes <strong class="code-highlight">.map()</strong> returns an entire data structure</li>
+                            <li>Concatenates all values of the inner data structures and returns an outer data structure</li>
+                        </ul>
+                        <p>Example (Scala):</p>
+                        <pre><code class="scala code-small">case class Student(name: String, classes: List[String])
+
+val students = List(
+    Student("Sally", List("CS101", "BIO310")),
+    Student("George", List()),
+    Student("Bradly", List("CS101")),
+    Student("Carol", List("TECH210", "CS320", "PHYS101"))
+)
+
+students.map(student => student.classes) // List[List[String]]
+    .flatten // List[String]
+
+// List(CS101, BIO310, CS101, TECH210, CS320, PHYS101)</code></pre>
+                    </section>
+                    <section>
+                        <h3>.flatMap()</h3>
+                        <p>Combines <strong class="code-highlight">.map()</strong> and <strong class="code-highlight">.flatten</strong></p>
+                        <p>Example (Scala):</p>
+                        <pre><code class="scala code-small">case class Student(name: String, classes: List[String])
+
+val students = List(
+    Student("Sally", List("CS101", "BIO310")),
+    Student("George", List()),
+    Student("Bradly", List("CS101")),
+    Student("Carol", List("TECH210", "CS320", "PHYS101"))
+)
+
+students.flatMap(student => student.classes) // List[String]
+
+// List(CS101, BIO310, CS101, TECH210, CS320, PHYS101)</code></pre>
+                    </section>
+                    <section>
+                        <h3>.filter()</h3>
+                        <ul>
+                            <li>Takes a predicate function</li>
+                            <li>Returns a copy of the data structure with every element that returns <strong class="code-highlight">true</strong></li>
+                        </ul>
+                        <p>Example (JavaScript):</p>
+                        <pre><code class="javascript code-small">[1, 2, 3, 4, 5, 6, 7, 8].filter(isEven); // [2, 4, 6, 8]</code></pre>
+                    </section>
+                    <section>
+                        <h3>.find()</h3>
+                        <ul>
+                            <li>Takes a predicate function</li>
+                            <li>Returns the first element that returns <strong class="code-highlight">true</strong></li>
+                        </ul>
+                        <p>Example (JavaScript):</p>
+                        <pre><code class="javascript code-small">[1, 2, 3, 4, 5, 6, 7, 8].find(isEven); // 2, would be undefined if nonexistent</code></pre>
+                        <p>Example (Scala):</p>
+                        <pre><code class="scala code-small">val result: Option[Int] = List(1, 2, 3, 4, 5, 6, 7, 8).find(isEven)
+// Some(2), would be None if nonexistent</code></pre>
+                    </section>
+                    <section>
+                        <h3>.some()/.exists()</h3>
+                        <ul>
+                            <li>Takes a predicate function</li>
+                            <li>Returns <strong class="code-highlight">true</strong> if <u>any</u> element returns <strong class="code-highlight">true</strong></li>
+                        </ul>
+                        <p>Example (JavaScript):</p>
+                        <pre><code class="javascript code-small">[1, 2, 3, 4, 5, 6, 7, 8].some(isEven); // true
+[].some(isEven); // false</code></pre>
+                    </section>
+                    <section>
+                        <h3>.every()/.forall()</h3>
+                        <ul>
+                            <li>Takes a predicate function</li>
+                            <li>
+                                Returns <strong class="code-highlight">true</strong> if <u>every</u> element returns <strong class="code-highlight">true</strong>
+                            </li>
+                        </ul>
+                        <p>Example (JavaScript):</p>
+                        <pre><code class="javascript code-small">[1, 2, 3, 4, 5, 6, 7, 8].every(isEven); // false
+[].every(isEven); // true</code></pre>
+                    </section>
+                    <section>
+                        <h3>.reduce()/.fold()</h3>
+                        <ul>
+                            <li>The most powerful functional operation for data structures</li>
+                            <li>Every previous operation can be implemented using <strong class="code-highlight">.reduce()</strong></li>
+                            <li>
+                                Takes:
+                                <ul>
+                                    <li>The starting value</li>
+                                    <li>A function that takes the current accumulated value and the next value in the list</li>
+                                </ul>
+                            </li>
+                            <li>Returns the final accumulated value</li>
+                        </ul>
+                        <p>Example (JavaScript):</p>
+                        <pre><code class="javascript code-small">[1, 2, 3, 4, 5, 6, 7, 8].reduce(
+    (acc, x) => acc || isEven(x),
+    false
+); // `.some()`</code></pre>
+                    </section>
+                    <section>
+                        <h3>Other <strong class="code-highlight">.reduce()</strong> examples</h3>
+                        <pre class="fragment"><code class="javascript code-small">[1, 2, 3, 4, 5, 6, 7, 8].reduce(
+    (acc, x) => acc + x,
+    0
+);</code></pre>
+
+<pre class="fragment"><code class="javascript code-small">[1, 2, 3, 4, 5, 6, 7, 8].reduce(
+    (acc, x) => acc.concat(x + 3),
+    []
+);</code></pre>
+
+<pre class="fragment"><code class="javascript code-small">[[1, 2], [3], [4, 5, 6], [7], [], [8]].reduce(
+    (acc, x) => acc.concat(x),
+    []
+);</code></pre>
+<p class="fragment"><strong class="code-highlight">.reduce()</strong> is powerful but complex; prefer more specialized functions</p>
+                    </section>
+                </section>
+                <section>
+                    <h3>Summary</h3>
+                    <ul>
+                        <li>Functional Programming is about <strong class="code-highlight">Pure Functions</strong> and <strong class="code-highlight">Immutability</strong></li>
+                        <li>
+                            FP principles make code:
+                            <ul>
+                                <li>Easier to reason about</li>
+                                <li>Safer to refactoring</li>
+                                <li>Safer to parallelize</li>
+                            </ul>
+                        </li>
+                        <li>FP principles come with tools that make the principles nicer to work with</li>
+                        <li>FP principles can be applied to imperative languages</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Questions?</h2>
+                </section>
+            </div>
+        </div>
+
+        <script src="../reveal/lib/js/head.min.js"></script>
+        <script src="../reveal/js/reveal.js"></script>
+
+        <script>
+            // More info https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                history: true,
+
+                // More info https://github.com/hakimel/reveal.js#dependencies
+                dependencies: [
+                    { src: '../reveal/plugin/markdown/marked.js' },
+                    { src: '../reveal/plugin/markdown/markdown.js' },
+                    { src: '../reveal/plugin/notes/notes.js', async: true },
+                    { src: '../reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+                ]
+            });
+        </script>
+    </body>
+</html>
+<pre><code class="scala code-small">

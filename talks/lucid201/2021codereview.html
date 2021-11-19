@@ -719,19 +719,39 @@ $ git rebase -i --autosquash &lt;master, master-stable, origin/master, etc&gt;</
                   </section>
                 </section>
                 <section>
-                  <h3>Merge Conflicts: <span class="code-highlight">Rebase</span> vs <span class="code-highlight">Merge</span></h3>
-                  <ul>
-                    <li>
-                      Pros and cons to both options
-                      <ul>
-                        <li><span class="code-highlight">Rebase</span> makes all existing changes look new to reviewers</li>
-                        <li><span class="code-highlight">Merge</span> makes <span class="code-highlight">fixup!</span> commits much harder to work with</li>
-                      </ul>
-                    </li>
-                    <li>Choose the correct option for the current state of your PR</li>
-                    <li>Rebase generally preferred, but be sure to communicate to keep reviewers informed!</li>
-                    <li>Reduce likelihood of merge conflicts by rebasing before you open your PR 😉</li>
-                  </ul>
+                  <section>
+                    <h3>Merge Conflicts: <span class="code-highlight">Rebase</span> vs <span class="code-highlight">Merge</span></h3>
+                    <ul>
+                      <li>
+                        Pros and cons to both options
+                        <ul>
+                          <li><span class="code-highlight">Rebase</span> makes all existing changes look new to reviewers</li>
+                          <li><span class="code-highlight">Merge</span> makes <span class="code-highlight">fixup!</span> commits much harder to work with</li>
+                        </ul>
+                      </li>
+                      <li>Choose the correct option for the current state of your PR</li>
+                      <li>Rebase generally preferred, but be sure to communicate to keep reviewers informed!</li>
+                      <li>Reduce likelihood of merge conflicts by rebasing before you open your PR 😉</li>
+                    </ul>
+                  </section>
+                  <section>
+                    <h3>A Caution</h3>
+                    <div class="image">
+                      <img src="codereview/2021/baguette-bonk-code-owners.png"
+                        alt="A tidal wave of code owners getting added to a pull request" />
+                    </div>
+                    <ul>
+                      <li>
+                        Rebasing/merging the wrong branch or changing your destination branch can cause a ton of codeowners to be added to your pull request
+                        <ul>
+                          <li>
+                            Tips on how to avoid this: <a href="https://lucidatlassian.atlassian.net/wiki/spaces/TOTW/pages/52469727267/Tip+of+the+Week+46+-+Change+your+PR+destination+without+adding+every+codeowner">https://lucidatlassian.atlassian.net/l/c/wFnYmHYX</a>
+                          </li>
+                          <li>Don't be afraid to ask for help, even if you feel like you should know how to do something already</li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </section>
                 </section>
                 <section>
                   <h3>Ongoing PRs: Summary</h3>
@@ -904,6 +924,16 @@ $ git rebase -i --autosquash &lt;master, master-stable, origin/master, etc&gt;</
                     <p>Code reviews are about quality, not finding fault. The point of software code review is to eliminate as many defects as possible, regardless of who "caused" the error.</p>
                     <p>As code reviews expose developers to new ideas and technologies, they write better and better code.</p>
                     <p>When done right, code reviews actually save time in the long run.</p>
+                  </ul>
+                </section>
+                <section>
+                  <h3>Eng @ Lucid Assignment</h3>
+                  <ul>
+                    <li>
+                      Be primary reviewer on at least one pr for 3 consecutive sprints. Provide meaningful feedback as needed.
+                      <ul><li>Talk with your team lead or manager to help make sure this happens</li></ul>
+                    </li>
+                    <li>Also, remember to fill out your survey! :)</li>
                   </ul>
                 </section>
                 <section>

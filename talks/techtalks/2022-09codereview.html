@@ -255,6 +255,17 @@
                   </section>
                 </section>
                 <section>
+                  <h3>Start your branch from a stable source</h3>
+                  <ul>
+                    <li>Every branch has to start somewhere</li>
+                    <li>If you are working on part of a larger feature, fork from your feature branch</li>
+                    <li>
+                      Otherwise, you probably want to fork from <span class="code-highlight">master-stable</span>
+                      <ul><li>More information: <a href="https://lucidatlassian.atlassian.net/wiki/spaces/TOTW/pages/52622360604/Tip+of+the+Week+64+-+master+vs+master-built+vs+master-stable">Tip of the Week #64</a></li></ul>
+                    </li>
+                  </ul>
+                </section>
+                <section>
                   <h3>A Note About Acceptance Criteria</h3>
                   <ul>
                     <li>Relied on by QA to know what features to test for your story</li>
@@ -753,6 +764,7 @@ $ git rebase --autosquash -i &lt;master, master-stable, origin/master, etc&gt;</
                           <li>Allows other reviewers to see your code with your corrections already in place</li>
                         </ul>
                       </li>
+                      <li>Your squashed commits will still be visible in Bitbucket even after you push</li>
                     </ul>
                   </section>
                 </section>
@@ -798,7 +810,7 @@ $ git rebase --autosquash -i &lt;master, master-stable, origin/master, etc&gt;</
                       Responsible Code Owner behavior:
                       <ul>
                         <li>If you don't review it all, leave a comment explaining what you did review</li>
-                        <li>Consier leaving a Task stating a full review is still required</li>
+                        <li>Consider leaving a Task stating a full review is still required</li>
                       </ul>
                     </li>
                   </ul>
